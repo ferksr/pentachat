@@ -1,4 +1,4 @@
-const quoteContainer = document.getElementById('quote');
+const quotesContainer = document.getElementById('quotes');
 const refreshButton = document.getElementById('refresh');
 let quotes = [];
 
@@ -11,22 +11,32 @@ function fetchQuotes() {
             console.log('Fetched data:', data); // Debugging line
             quotes = data.split('\n').map(line => line.trim()).filter(line => line);
             console.log('Quotes:', quotes); // Debugging line
-            displayRandomQuote();
+            displayRandomQuotes();
         })
         .catch(error => console.error('Error fetching the quotes:', error));
 }
 
-function displayRandomQuote() {
+function displayRandomQuotes() {
+    quotesContainer.innerHTML = ''; // Clear previous quotes
     if (quotes.length > 0) {
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-        console.log('Random Quote:', randomQuote); // Debugging line
-        quoteContainer.innerText = randomQuote;
+        const randomQuotes = [];
+        for (let i = 0; i < 5; i++) {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            randomQuotes.push(randomQuote);
+        }
+        console.log('Random Quotes:', randomQuotes); // Debugging line
+        randomQuotes.forEach(quote => {
+            const quoteElement = document.createElement('p');
+            quoteElement.className = 'quote';
+            quoteElement.innerText = quote;
+            quotesContainer.appendChild(quoteElement);
+        });
     } else {
-        quoteContainer.innerText = 'No quotes available';
+        quotesContainer.innerText = 'No quotes available';
     }
 }
 
-refreshButton.addEventListener('click', displayRandomQuote);
+refreshButton.addEventListener('click', displayRandomQuotes);
 
 // Initial quote display
 fetchQuotes();
