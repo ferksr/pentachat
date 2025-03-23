@@ -25,12 +25,14 @@ function displayRandomQuotes() {
             randomQuotes.push(randomQuote);
         }
         console.log('Random Quotes:', randomQuotes); // Debugging line
+        const ul = document.createElement('ul');
         randomQuotes.forEach(quote => {
-            const quoteElement = document.createElement('p');
+            const quoteElement = document.createElement('li');
             quoteElement.className = 'quote';
             quoteElement.innerText = quote;
-            quotesContainer.appendChild(quoteElement);
+            ul.appendChild(quoteElement);
         });
+        quotesContainer.appendChild(ul);
     } else {
         quotesContainer.innerText = 'No quotes available';
     }
