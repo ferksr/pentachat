@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Aptos:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap'); /* Added Pacifico font */
 
 body {
     font-family: 'Aptos', sans-serif;
@@ -22,6 +23,21 @@ body {
     max-width: 600px;
     width: 100%; /* Full width */
     box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+.title {
+    text-align: center; /* Center the title horizontally */
+    margin-top: 0; /* Remove default margin */
+    margin-bottom: 20px; /* Add margin to the bottom */
+    font-family: 'Pacifico', cursive; /* Use Pacifico font */
+    color: #007bff; /* Blue color matching the button */
+}
+
+.favicon {
+    vertical-align: middle; /* Align the favicon vertically with the text */
+    margin-right: 10px; /* Add space between the favicon and the text */
+    width: 24px; /* Set the width of the favicon */
+    height: 24px; /* Set the height of the favicon */
 }
 
 .dropdown {
@@ -65,7 +81,8 @@ ul {
 }
 
 .warning {
-    margin-top: 20px;
+    margin-top: 20px; /* Ensure consistent spacing */
+    margin-bottom: 20px; /* Add margin to the bottom */
     padding: 10px;
     background-color: #ffcc00;
     color: #333;
