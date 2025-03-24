@@ -24,6 +24,18 @@ body {
     box-sizing: border-box; /* Include padding in element's total width and height */
 }
 
+.dropdown {
+    display: block;
+    margin: 0 auto 20px auto;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 200px;
+    box-sizing: border-box;
+}
+
 ul {
     padding-left: 20px; /* Add padding to the left of the list */
     margin: 0; /* Remove default margin */
