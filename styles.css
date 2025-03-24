@@ -63,3 +63,13 @@ ul {
 .button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
+
+.warning {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #ffcc00;
+    color: #333;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+}
