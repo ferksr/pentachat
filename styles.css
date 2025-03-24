@@ -5,9 +5,8 @@ body {
     background-color: #f4f4f4;
     color: #333;
     display: flex;
-    justify-content: center;
+    justify-content: center;    
     align-items: center;
-    height: 100vh;
     margin: 0;
     padding: 20px; /* Add padding to body */
     box-sizing: border-box; /* Include padding in element's total width and height */
@@ -25,11 +24,15 @@ body {
     box-sizing: border-box; /* Include padding in element's total width and height */
 }
 
+ul {
+    padding-left: 20px; /* Add padding to the left of the list */
+    margin: 0; /* Remove default margin */
+}
+
 .quote {
     font-size: 1.2em;
     margin-bottom: 15px;
     list-style-type: disc;
-    padding-left: 20px; /* Add padding to the left of the list items */
 }
 
 .button {
