@@ -6,11 +6,6 @@ let categories = new Set();
 let quoteHistory = {}; // Initialize history object
 let quotesFetched = false; // Flag to prevent multiple fetches
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOMContentLoaded event triggered');
-    fetchQuotes();
-});
-
 function fetchQuotes() {
     if (quotesFetched) {
         console.log('Quotes already fetched, skipping fetchQuotes');
@@ -173,5 +168,14 @@ categoryDropdown.addEventListener('change', () => {
 
 refreshButton.addEventListener('click', displayRandomQuotes);
 
-// Initial quote display
-fetchQuotes();
+// Remove the event listener and direct call, replace with a single initialization
+function initializeApp() {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fetchQuotes);
+    } else {
+        fetchQuotes();
+    }
+}
+
+// Replace the existing event listener and direct call with this
+initializeApp();
