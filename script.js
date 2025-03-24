@@ -6,7 +6,6 @@ let categories = new Set();
 let quoteHistory = {}; // Initialize history object
 let quotesFetched = false; // Flag to prevent multiple fetches
 
-// Single event listener to initialize the page
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOMContentLoaded event triggered');
     fetchQuotes();
@@ -74,89 +73,63 @@ function populateCategoryDropdown() {
 }
 
 function displayRandomQuotes() {
-    console.log('Displaying random quotes');
-    quotesContainer.innerHTML = ''; // Clear previous quotes
+    console.log('------------------------');
+    console.log('Starting displayRandomQuotes');
+    quotesContainer.innerHTML = '';
     const selectedCategory = categoryDropdown.value;
     console.log('Selected category:', selectedCategory);
-    const filteredQuotes = selectedCategory === 'Random' ? quotes : quotes.filter(q => q.category === selectedCategory);
+    
+    const filteredQuotes = selectedCategory === 'Random' 
+        ? quotes 
+        : quotes.filter(q => q.category === selectedCategory);
+    
+    console.log(`Total quotes in category: ${filteredQuotes.length}`);
 
-    // Initialize history for all categories if not already done
-    categories.forEach(category => {
-        if (!quoteHistory[category]) {
-            quoteHistory[category] = new Set();
+    // Initialize history if needed
+    if (!quoteHistory[selectedCategory]) {
+        quoteHistory[selectedCategory] = new Set();
+    }
+
+    // Main quote selection
+    const randomQuotes = [];
+
+    // Keep selecting quotes until we have 5
+    while (randomQuotes.length < 5) {
+        // If we've shown all quotes, reset history
+        if (quoteHistory[selectedCategory].size >= filteredQuotes.length) {
+            console.log('All quotes used - Resetting history');
+            quoteHistory[selectedCategory].clear();
+            showResetWarning();
         }
+
+        // Get available indices (those not in history)
+        const availableIndices = Array.from(Array(filteredQuotes.length).keys())
+            .filter(index => !quoteHistory[selectedCategory].has(index));
+        
+        // Select a random index from available ones
+        const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+        
+        // Add to history and quotes
+        quoteHistory[selectedCategory].add(randomIndex);
+        randomQuotes.push(filteredQuotes[randomIndex].quote);
+        console.log(`Added quote ${randomIndex}. Now have ${randomQuotes.length}/5 quotes`);
+    }
+
+    console.log(`Selection complete - ${randomQuotes.length} quotes selected`);
+    console.log(`Final history size: ${quoteHistory[selectedCategory].size}`);
+
+    // Display quotes
+    const ul = document.createElement('ul');
+    randomQuotes.forEach((quote, index) => {
+        const quoteElement = document.createElement('li');
+        quoteElement.className = 'quote';
+        quoteElement.innerText = quote;
+        ul.appendChild(quoteElement);
+        console.log(`Rendered quote ${index + 1}/${randomQuotes.length}`);
     });
-
-    // Check if all quotes have been shown for the selected category
-    if (selectedCategory !== 'Random') {
-        const categoryQuotes = quotes.filter(q => q.category === selectedCategory);
-        if (quoteHistory[selectedCategory].size >= categoryQuotes.length) {
-            showResetWarning();
-            quoteHistory[selectedCategory].clear(); // Reset history for the selected category
-        } else {
-            removeResetWarning();
-        }
-    }
-
-    // Check if all quotes have been shown for the "Random" category
-    if (selectedCategory === 'Random') {
-        let allShown = true;
-        categories.forEach(category => {
-            const categoryQuotes = quotes.filter(q => q.category === category);
-            if (quoteHistory[category].size < categoryQuotes.length) {
-                allShown = false;
-            }
-        });
-        if (allShown) {
-            showResetWarning();
-            categories.forEach(category => quoteHistory[category].clear()); // Reset history for all categories
-        } else {
-            removeResetWarning();
-        }
-    }
-
-    if (filteredQuotes.length > 0) {
-        const randomQuotes = [];
-        const usedIndexes = new Set();
-        while (randomQuotes.length < 5 && usedIndexes.size < filteredQuotes.length) {
-            const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-            const quoteCategory = filteredQuotes[randomIndex].category;
-            if (!usedIndexes.has(randomIndex) && !quoteHistory[quoteCategory].has(randomIndex)) {
-                usedIndexes.add(randomIndex);
-                quoteHistory[quoteCategory].add(randomIndex);
-                randomQuotes.push(filteredQuotes[randomIndex].quote);
-            }
-        }
-
-        // If not enough quotes, reset and continue
-        if (randomQuotes.length < 5) {
-            if (selectedCategory === 'Random') {
-                categories.forEach(category => quoteHistory[category].clear());
-            } else {
-                quoteHistory[selectedCategory].clear();
-            }
-            while (randomQuotes.length < 5 && usedIndexes.size < filteredQuotes.length) {
-                const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
-                const quoteCategory = filteredQuotes[randomIndex].category;
-                if (!usedIndexes.has(randomIndex)) {
-                    usedIndexes.add(randomIndex);
-                    quoteHistory[quoteCategory].add(randomIndex);
-                    randomQuotes.push(filteredQuotes[randomIndex].quote);
-                }
-            }
-        }
-
-        const ul = document.createElement('ul');
-        randomQuotes.forEach(quote => {
-            const quoteElement = document.createElement('li');
-            quoteElement.className = 'quote';
-            quoteElement.innerText = quote;
-            ul.appendChild(quoteElement);
-        });
-        quotesContainer.appendChild(ul);
-    } else {
-        quotesContainer.innerText = 'No quotes available';
-    }
+    quotesContainer.appendChild(ul);
+    console.log('Quotes display complete');
+    console.log('------------------------');
 }
 
 function showResetWarning() {
@@ -199,3 +172,6 @@ categoryDropdown.addEventListener('change', () => {
 });
 
 refreshButton.addEventListener('click', displayRandomQuotes);
+
+// Initial quote display
+fetchQuotes();
