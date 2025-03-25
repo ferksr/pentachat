@@ -18,6 +18,7 @@ function fetchQuotes() {
             console.log('Quotes fetched');
             quotesFetched = true; // Set the flag to true after fetching quotes
             const rows = parseCSV(data);
+            rows.shift(); // Remove the first row (column names)
             quotes = rows.map(row => ({ quote: row[0], category: row[1] }));
             categories = new Set(rows.map(row => row[1]).filter(category => category));
             console.log('Quotes and categories processed');
